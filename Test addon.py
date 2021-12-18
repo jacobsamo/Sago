@@ -57,6 +57,11 @@ class MESH_OT_MONKEY_grid(bpy.types.Operator):
     
 
 
+
+        
+
+    
+
 ############## Panels and Pie Menus ########################
 class TestPanel(bpy.types.Panel):
     bl_label = "test Panel"
@@ -76,6 +81,7 @@ class TestPanel(bpy.types.Panel):
         row.operator("mesh.primitive_uv_sphere_add", icon="MESH_UVSPHERE")
         row = layout.row()
         row.operator("mesh.monkey_grid", icon="MONKEY")
+       
         
 class VIEW3D_MT_PIE_test(bpy.types.Menu):
     # label is displayed at the center of the pie menu.
@@ -86,7 +92,7 @@ class VIEW3D_MT_PIE_test(bpy.types.Menu):
 
         pie = layout.menu_pie()
 
-        layout.operator("bpy.context.object.data.use_auto_smooth")
+        pie.operator("mesh.use_auot_smooth")
         # operator_enum will just spread all available options
         # for the type enum of the operator on the pie
         #pie.operator_enum("mesh.select_mode", "type")
@@ -97,15 +103,21 @@ class VIEW3D_MT_PIE_test(bpy.types.Menu):
 def register():
     bpy.utils.register_class(MESH_OT_MONKEY_grid)
     bpy.utils.register_class(TestPanel)
-   
+    
     
 def unregister():
     bpy.utils.unregister_class(MESH_OT_MONKEY_grid)
     bpy.utils.unregister_class(TestPanel)
+   
+
+
     
 if __name__ == '__main__':
     register()
 
+    
+
+    
 
 """class VIEW3D_PT_monkey_grid(bpy.types.Panel):
     bl_space_type = 'VIEW3D'
