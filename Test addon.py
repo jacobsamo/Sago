@@ -11,10 +11,12 @@ bl_info = {
     "category": "Object",
 }
 from typing import Text
+import random
 import bpy
 
 
 
+###################### Operators ###########################
 class MESH_OT_MONKEY_grid(bpy.types.Operator):
     """The Tool Tip"""
     bl_idname = 'mesh.monkey_grid'
@@ -55,7 +57,7 @@ class MESH_OT_MONKEY_grid(bpy.types.Operator):
     
 
 
-
+############## Panels and Pie Menus ########################
 class TestPanel(bpy.types.Panel):
     bl_label = "test Panel"
     bl_idname = "PT_TestPanel"
@@ -75,9 +77,23 @@ class TestPanel(bpy.types.Panel):
         row = layout.row()
         row.operator("mesh.monkey_grid", icon="MONKEY")
         
+class VIEW3D_MT_PIE_test(bpy.types.Menu):
+    # label is displayed at the center of the pie menu.
+    bl_label = "Select Mode"
+
+    def draw(self, context):
+        layout = self.layout
+
+        pie = layout.menu_pie()
+
+        layout.operator("bpy.context.object.data.use_auto_smooth")
+        # operator_enum will just spread all available options
+        # for the type enum of the operator on the pie
+        #pie.operator_enum("mesh.select_mode", "type")
+
+
     
-    
-    
+################### Register and unregister  
 def register():
     bpy.utils.register_class(MESH_OT_MONKEY_grid)
     bpy.utils.register_class(TestPanel)
