@@ -16,24 +16,51 @@ import bpy
 import os
 
 
+class RenderAndShutdown(bpy.types.Operator):
+
+    bl_idname = 'render.shutdown'
+    bl_label = 'Render And shutdown'
+     
+    def execute(self, context):
+        bpy.ops.render.render(animation=True)
+
+class TOPBAR_PT_Render_shutdown(bpy.types.Panel):
+    """
+    adds a tab under render to render an aimtion and shutdown the computer once fi
+    """
+    bl_idname = "TOPBAR_PT_Render_shutdown"
+    bl_region_type = 'HEADER'
+    bl_space_type = 'TOPBAR'
+    bl_label = "Render and shutdown"
 
 
-class RenderShutdown(bpy.types.):
-    bl_label = "Render and Shutdown"
-    bl_idname = ""
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = ''
-    bl_category = ''
 
-    def draw(self, context):
-        layout = self.layout
+ 
+def some_other_function(dummy):
+    print("Render complete")
+    bpy.ops.wm.save_mainfile()
+    bpy.ops.wm.quit_blender() #instead of quitting blender shutdown computer: os.system("shutdown /s /t 1") 
 
-Once render is finahed:
+    
+            
+bpy.app.handlers.render_complete.append(some_other_function)      
+
+
+   
+
+       
+
+
+Once a render is finished
 
 #save file 
+bpy.ops.wm.save_mainfile()
 
+#shutdown computer
 os.system("shutdown /s /t 1") 
 
+#close blender aplication
+bpy.ops.wm.quit_blender()
 
 
 
