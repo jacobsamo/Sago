@@ -3,7 +3,7 @@ bl_info = {
     "author": "Jacob",
     "version": (1, 0),
     "blender": (2, 65, 0),
-    "location": "3d veiw > F3 > Search > Monkey grid",
+    "location": "3D Veiw > N Panel > My 1st addon",
     "description": "Adds monkeys in rows",
     "warning": "",
     "doc_url": "",
@@ -58,6 +58,7 @@ class MESH_OT_MONKEY_grid(bpy.types.Operator):
 
 
 
+
         
 
     
@@ -81,8 +82,11 @@ class TestPanel(bpy.types.Panel):
         row.operator("mesh.primitive_uv_sphere_add", icon="MESH_UVSPHERE")
         row = layout.row()
         row.operator("mesh.monkey_grid", icon="MONKEY")
+        row = layout.row()
+        row.operator("mesh.subdivide", icon="MESH_GRID")
+
        
-        
+
 class WM_OT_pie_menu(bpy.types.Menu):
     # label is displayed at the center of the pie menu.
     bl_label = "Select Mode"
@@ -93,16 +97,23 @@ class WM_OT_pie_menu(bpy.types.Menu):
 
         pie = layout.menu_pie()
 
-        if active_object:
+        pie.operator("mesh.subdivide", icon="MESH_GRID")
+        pie.operator("bpy.context.object.data.use_auto_smooth = True", icon="MONKEY")
 
-            mode = active_object.mode
+       
 
-        if mode(mode == "OBJECT"):
-            pie.operator ("mesh.primitive_cube_add")
-            pie.operator(" ")
-        
-        if mode(mode == "EDIT"):
-            pie.operator(" ")
+        mode = object.mode
+        if mode == "OBJECT":
+            pie.operator("mesh.primitive_uv_sphere_add")
+
+        if mode == "EDIT":
+             pie.operator("mesh.subdivide", icon="MESH_GRID")
+             pie.operator("mesh.primitive_cube_add", icon="CUBE")
+
+            
+
+
+
 
 
 
@@ -129,7 +140,7 @@ def register():
     kc = wm.keyconfigs.addon
     if kc:
         km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
-        kmi = km.keymap_items.new("wm.call_menu_pie", type='E', value='PRESS')
+        kmi = km.keymap_items.new("wm.call_menu_pie", type='BUTTON4MOUSE', value='PRESS')
         kmi.properties.name = "WM_OT_pie_menu"
         addon_keymaps.append((km,kmi))
     
