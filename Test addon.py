@@ -83,31 +83,72 @@ class TestPanel(bpy.types.Panel):
         row.operator("mesh.monkey_grid", icon="MONKEY")
        
         
-class VIEW3D_MT_PIE_test(bpy.types.Menu):
+class WM_OT_pie_menu(bpy.types.Menu):
     # label is displayed at the center of the pie menu.
     bl_label = "Select Mode"
+    bl_idname = "WM_OT_pie_menu"
 
     def draw(self, context):
         layout = self.layout
 
         pie = layout.menu_pie()
 
-        pie.operator("mesh.use_auot_smooth")
+        if active_object:
+
+            mode = active_object.mode
+
+        if mode(mode == "OBJECT"):
+            pie.operator ("mesh.primitive_cube_add")
+            pie.operator(" ")
+        
+        if mode(mode == "EDIT"):
+            pie.operator(" ")
+
+
+
+        
+
+       
         # operator_enum will just spread all available options
         # for the type enum of the operator on the pie
         #pie.operator_enum("mesh.select_mode", "type")
+addon_keymaps = []
+classes = [MESH_OT_MONKEY_grid,
+TestPanel,
+WM_OT_pie_menu,
 
-
-    
+]  
 ################### Register and unregister  
 def register():
-    bpy.utils.register_class(MESH_OT_MONKEY_grid)
-    bpy.utils.register_class(TestPanel)
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
+
+
+    wm = bpy.context.window_manager
+    kc = wm.keyconfigs.addon
+    if kc:
+        km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
+        kmi = km.keymap_items.new("wm.call_menu_pie", type='E', value='PRESS')
+        kmi.properties.name = "WM_OT_pie_menu"
+        addon_keymaps.append((km,kmi))
     
+
+
     
 def unregister():
-    bpy.utils.unregister_class(MESH_OT_MONKEY_grid)
-    bpy.utils.unregister_class(TestPanel)
+    for cls in classes:
+        bpy.utils.unregister_class(cls)
+
+    for km,kmi in addon_keymaps:
+        km.keymap_items.remove(kmi)
+    addon_keymaps.clear()
+
+    
+
+    
+
+    
    
 
 
