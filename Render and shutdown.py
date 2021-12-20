@@ -21,6 +21,12 @@ def some_other_function(dummy):
     
 bpy.app.handlers.render_complete.append(some_other_function)     
 
+def some_other_function(dummy):
+    print("some other function")
+
+
+# Will be executed once when the whole rendering process is completed
+bpy.app.handlers.render_complete.append(some_other_function)
 
 
 
