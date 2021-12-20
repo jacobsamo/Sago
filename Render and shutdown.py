@@ -10,11 +10,17 @@ bl_info = {
     "tracker_url": "",
     "category": "Render",
 }
-from typing import 
 import random
 import bpy
-from bpy.props import BoolProperty
 import os
+
+def some_other_function(dummy):
+      print("Render complete")
+      bpy.ops.wm.save_mainfile()
+      bpy.ops.wm.quit_blender() #instead of quitting blender shutdown computer: os.system("shutdown /s /t 1") 
+    
+bpy.app.handlers.render_complete.append(some_other_function)     
+
 
 
 
@@ -87,14 +93,7 @@ class MySettings(PropertyGroup):
         description="A bool property",
         default = False
         )
-
-if my_bool == True:
-    def some_other_function(dummy):
-      print("Render complete")
-      bpy.ops.wm.save_mainfile()
-      bpy.ops.wm.quit_blender() #instead of quitting blender shutdown computer: os.system("shutdown /s /t 1") 
     
-
 
 
  
@@ -102,7 +101,7 @@ if my_bool == True:
 
     
             
-bpy.app.handlers.render_complete.append(some_other_function)      
+ 
 
 
 
