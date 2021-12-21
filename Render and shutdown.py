@@ -13,7 +13,7 @@ bl_info = {
 import random
 import bpy
 import os
-from . bl_ui_widget import *
+
 
   
 
@@ -28,36 +28,85 @@ def some_other_function(dummy):
 bpy.app.handlers.render_complete.append(some_other_function)
 
 
+#--------------------------------------------------------
+                #Operators
+#--------------------------------------------------------
+class Shutdown(bpy.types.Operator):
+    """
+    selects the surface objects will snap to
+    """
+    bl_idname = "Render.shutdown"
+    bl_label = "Render and shut down"
+    bl_description = ""
 
 
-# add your custom property to the Scene tpye
-bpy.types.Scene.my_prop = bpy.types.BoolProperty(
-    name="Prop name",
-        description="Some tooltip",
-        default = True)
-        
-# your custom panel
-class MyPanel(bpy.types.Panel):
-    bl_space_type = 'PROPERTIES'
-    bl_region_type = 'WINDOW'
-    bl_context = "render"        # where it will appear (render, world, material...)
-    bl_label = 'My custom panel'
-    
-    @classmethod
-    def poll(self, context):
-        return True
-        
+
+
+#--------------------------------------------------------
+                #Panels
+#--------------------------------------------------------
+
+               
+class TestPanel(bpy.types.Panel):
+
+    bl_label = "Render and shutdown"
+    bl_idname = "PT_Test"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Render extras'
+
+
     def draw(self, context):
         layout = self.layout
-        sce = context.scene
-        # draw the checkbox (implied from property type = bool)
-        layout.prop(sce, "my_prop") 
+        view = context.space_data
+        row = layout.row()
 
-# must register the panel
-bpy.utils.register_class(MyPanel)
+    
+
+    
+    
+
+
+
+
+#--------------------------------------------------------
+                #Menus
+#--------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+#--------------------------------------------------------
+                #Properties 
+#--------------------------------------------------------
+
+
+
+class EirfireProperties(bpy.types.PropertyGroup):
+    
+    Render: bpy.types.BoolProperty(
+        name="Make Collection Unique",
+        description="Make the imported collection unique",
+        default = False
+        )
+    
+
 
 
     
+    
+            
+  
+#--------------------------------------------------------
+                #Notes
+#--------------------------------------------------------
+   
 
 #Once a render is finished
 
@@ -70,47 +119,25 @@ bpy.utils.register_class(MyPanel)
 #close blender aplication
 #bpy.ops.wm.quit_blender()
 
-
+#--------------------------------------------------------
+                #Register and Unregister plus keymaps
+#--------------------------------------------------------
 
 addon_keymaps = []
-classes = [Shutdown, 
+
+classes = [MyPanel,
 
 
-] 
+]
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-
-
-
-    wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
-    if kc:
-        km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
-        kmi = km.keymap_items.new("wm.call_menu_pie", type='BUTTON4MOUSE', value='PRESS')
-        kmi.properties.name = "WM_OT_pie_menu"
-        addon_keymaps.append((km,kmi))
-    
-
-
-    
+   
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
 
-    for km,kmi in addon_keymaps:
-        km.keymap_items.remove(kmi)
-    addon_keymaps.clear()
 
-    
-
-    
-
-    
-   
-
-
-    
 if __name__ == '__main__':
     register()
