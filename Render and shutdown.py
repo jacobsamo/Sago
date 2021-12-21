@@ -13,6 +13,8 @@ bl_info = {
 import random
 import bpy
 import os
+from bpy.props import *
+from bpy.types import (Panel,Menu,Operator,PropertyGroup)
 
 
   
@@ -60,6 +62,9 @@ class TestPanel(bpy.types.Panel):
         layout = self.layout
         view = context.space_data
         row = layout.row()
+        EItool = scene.Render
+
+        row.prop(EItool, "Render")
 
     
 
@@ -88,9 +93,9 @@ class TestPanel(bpy.types.Panel):
 
 
 
-class EirfireProperties(bpy.types.PropertyGroup):
+class EirfireProperties(PropertyGroup):
     
-    Render: bpy.types.BoolProperty(
+    Render: BoolProperty(
         name="Make Collection Unique",
         description="Make the imported collection unique",
         default = False
@@ -123,20 +128,28 @@ class EirfireProperties(bpy.types.PropertyGroup):
                 #Register and Unregister plus keymaps
 #--------------------------------------------------------
 
+
+
+
+
+
 addon_keymaps = []
 
-classes = [MyPanel,
-
+classes = [TestPanel,
+EirfireProperties,
 
 ]
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
+    bpy.types.Scene.EI_tool = bpy.types.PointerProperty(type= EirfireProperties)
    
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
+    
+    del bpy.types.Scene.EI_tool
 
 
 if __name__ == '__main__':
