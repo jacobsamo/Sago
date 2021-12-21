@@ -66,6 +66,12 @@ class TestPanel(bpy.types.Panel):
 
         row.prop(EItool, "Render")
 
+    def draw(self, context):
+        If Render == True:
+           bpy.app.handlers.render_complete.append(some_other_function)
+             
+
+
     
 
     
