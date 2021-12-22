@@ -17,17 +17,21 @@ from bpy.props import *
 from bpy.types import (Panel,Menu,Operator,PropertyGroup)
 
 
-  
+import bpy
 
 def some_other_function(dummy):
     print("Render complete")
     bpy.ops.wm.save_mainfile()
     bpy.ops.wm.quit_blender() #instead of quitting blender shutdown computer: os.system("shutdown /s /t 1") 
+
+bpy.app.handlers.render_complete.append(some_other_function)
+
+
     
 
 
 # Will be executed once when the whole rendering process is completed
-bpy.app.handlers.render_complete.append(some_other_function)
+
 
 
 #--------------------------------------------------------
@@ -66,11 +70,13 @@ class TestPanel(bpy.types.Panel):
 
         row.prop(EItool, "Render")
 
-    def draw(self, context):
-        If Render == True:
-           bpy.app.handlers.render_complete.append(some_other_function)
-             
+        if Render == True:
+            
+        else:
+            print("Check box is off")
 
+
+    
 
     
 
@@ -101,14 +107,32 @@ class TestPanel(bpy.types.Panel):
 
 class EirfireProperties(PropertyGroup):
     
-    Render: BoolProperty(
+    Render_Shutdown: BoolProperty(
         name="Make Collection Unique",
         description="Make the imported collection unique",
         default = False
         )
     
 
+#Refence of a check box working in blender
+"""class CYCLES_RENDER_PT_sampling_render_denoise(CyclesButtonsPanel, Panel):
+    bl_label = "Denoise"
+    bl_parent_id = 'CYCLES_RENDER_PT_sampling_render'
+    bl_options = {'DEFAULT_CLOSED'}
 
+    def draw_header(self, context):
+        scene = context.scene
+        cscene = scene.cycles
+
+        self.layout.prop(context.scene.cycles, "use_denoising", text="")
+
+    def draw(self, context):
+        layout = self.layout
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+
+        scene = context.scene
+        cscene = scene.cycles"""
 
     
     
@@ -149,13 +173,15 @@ EirfireProperties,
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-    bpy.types.Scene.EI_tool = bpy.types.PointerProperty(type= EirfireProperties)
+    
+    bpy.types.Scene.EI_tool = PointerProperty(type=EirfireProperties)
+
    
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
     
-    del bpy.types.Scene.EI_tool
+    bpy.app.handlers.render_complete.append(some_other_function)
 
 
 if __name__ == '__main__':

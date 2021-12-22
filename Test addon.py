@@ -16,7 +16,10 @@ import bpy
 
 
 
-###################### Operators ###########################
+#--------------------------------------------------------
+                #Operators 
+#--------------------------------------------------------
+   
 class MESH_OT_MONKEY_grid(bpy.types.Operator):
     """The Tool Tip"""
     bl_idname = 'mesh.monkey_grid'
@@ -63,8 +66,14 @@ class MESH_OT_MONKEY_grid(bpy.types.Operator):
 
     
 
-############## Panels and Pie Menus ########################
+#--------------------------------------------------------
+                #Panels
+#--------------------------------------------------------
+   
 class TestPanel(bpy.types.Panel):
+
+
+
     bl_label = "test Panel"
     bl_idname = "PT_TestPanel"
     bl_space_type = 'VIEW_3D'
@@ -82,11 +91,19 @@ class TestPanel(bpy.types.Panel):
         row.operator("mesh.primitive_uv_sphere_add", icon="MESH_UVSPHERE")
         row = layout.row()
         row.operator("mesh.monkey_grid", icon="MONKEY")
-        row = layout.row()
+        
+        layout.separator()
         row.operator("mesh.subdivide", icon="MESH_GRID")
 
-       
 
+
+
+
+       
+#--------------------------------------------------------
+                #Menus
+#--------------------------------------------------------
+   
 class WM_OT_pie_menu(bpy.types.Menu):
     # label is displayed at the center of the pie menu.
     bl_label = "Select Mode"
@@ -123,13 +140,23 @@ class WM_OT_pie_menu(bpy.types.Menu):
         # operator_enum will just spread all available options
         # for the type enum of the operator on the pie
         #pie.operator_enum("mesh.select_mode", "type")
+
+
+
+
+
+#--------------------------------------------------------
+                #Register and Unregister plus keymaps
+#--------------------------------------------------------
+
+
 addon_keymaps = []
 classes = [MESH_OT_MONKEY_grid,
 TestPanel,
 WM_OT_pie_menu,
 
 ]  
-################### Register and unregister  
+  
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
