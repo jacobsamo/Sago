@@ -3,12 +3,12 @@ bl_info = {
     "author": "Jacob",
     "version": (1, 0),
     "blender": (2, 65, 0),
-    "location": "3D Veiw > N Panel > My 1st addon",
+    "location": "3D Veiw > N Panel > My 1st addon, pie menu hot key: mouse button 4",
     "description": "Adds monkeys in rows",
     "warning": "",
     "doc_url": "",
     "tracker_url": "",
-    "category": "Object",
+    "category": "Mesh",
 }
 from typing import Text
 import random
@@ -91,7 +91,7 @@ class TestPanel(bpy.types.Panel):
         row.operator("mesh.primitive_uv_sphere_add", icon="MESH_UVSPHERE")
         row = layout.row()
         row.operator("mesh.monkey_grid", icon="MONKEY")
-        
+
         layout.separator()
         row.operator("mesh.subdivide", icon="MESH_GRID")
 
@@ -181,14 +181,6 @@ def unregister():
     for km,kmi in addon_keymaps:
         km.keymap_items.remove(kmi)
     addon_keymaps.clear()
-
-    
-
-    
-
-    
-   
-
 
     
 if __name__ == '__main__':
