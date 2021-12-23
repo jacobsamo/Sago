@@ -17,14 +17,12 @@ from bpy.props import *
 from bpy.types import (Panel,Menu,Operator,PropertyGroup)
 
 
-import bpy
-
 def some_other_function(dummy):
     print("Render complete")
     bpy.ops.wm.save_mainfile()
     bpy.ops.wm.quit_blender() #instead of quitting blender shutdown computer: os.system("shutdown /s /t 1") 
 
-bpy.app.handlers.render_complete.append(some_other_function)
+
 
 
     
@@ -37,13 +35,6 @@ bpy.app.handlers.render_complete.append(some_other_function)
 #--------------------------------------------------------
                 #Operators
 #--------------------------------------------------------
-class Shutdown(bpy.types.Operator):
-    """
-    selects the surface objects will snap to
-    """
-    bl_idname = "Render.shutdown"
-    bl_label = "Render and shut down"
-    bl_description = ""
 
 
 
@@ -68,12 +59,12 @@ class TestPanel(bpy.types.Panel):
         row = layout.row()
         EItool = scene.Render
 
-        row.prop(EItool, "Render")
+        row.prop(EItool, " Render_Shutdown")
 
-        if Render == True:
-            
-        else:
-            print("Check box is off")
+    if  Render_Shutdown == True:
+        bpy.app.handlers.render_complete.append(some_other_function)
+
+
 
 
     
@@ -174,14 +165,14 @@ def register():
     for cls in classes:
         bpy.utils.register_class(cls)
     
-    bpy.types.Scene.EI_tool = PointerProperty(type=EirfireProperties)
+    bpy.types.Scene.EI_tool = bpy.types.PointerProperty(type=EirfireProperties)
 
    
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
     
-    bpy.app.handlers.render_complete.append(some_other_function)
+    
 
 
 if __name__ == '__main__':
