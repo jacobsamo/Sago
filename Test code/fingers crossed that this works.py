@@ -51,9 +51,8 @@ class OBJECT_PT_CustomPanel(Panel):
         layout.prop(mytool, "my_bool")
 
         if "my_bool"==True:
-            print("yayyyyy")
-        else:
-            print("damn it didn't work")
+            print("bpy.ops.mesh.primitive_cube_add")
+       
 
 
 
