@@ -57,22 +57,19 @@ class TestPanel(bpy.types.Panel):
         layout = self.layout
         view = context.space_data
         row = layout.row()
-        EItool = scene.Render
+        EItool = scene.EI_tool
 
         row.prop(EItool, " Render_Shutdown")
 
-    if  Render_Shutdown == True:
-        bpy.app.handlers.render_complete.append(some_other_function)
+        
+        if  Render_Shutdown == True:
+            bpy.app.handlers.render_complete.append(some_other_function)
+        
 
 
+   
 
 
-    
-
-    
-
-    
-    
 
 
 
@@ -84,6 +81,9 @@ class TestPanel(bpy.types.Panel):
 
 
 
+
+       
+ 
 
 
 
@@ -98,9 +98,9 @@ class TestPanel(bpy.types.Panel):
 
 class EirfireProperties(PropertyGroup):
     
-    Render_Shutdown: BoolProperty(
-        name="Make Collection Unique",
-        description="Make the imported collection unique",
+    Render_Shutdown: bpy.props.BoolProperty(
+        Render_Shutdown="Shutdown computer",
+        description="Once a render is finihsed shutdown computer",
         default = False
         )
     
