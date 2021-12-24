@@ -6,7 +6,7 @@ bl_info = {
     "location": "render > Render and shutdown",
     "description": "Once render is finished it will save the blend file and shutdown your pc",
     "warning": "",
-    "doc_url": "",
+    "doc_url": "https://github.com/Eirfire/Blender-addon.wiki.git",
     "tracker_url": "",
     "category": "Render",
 }
