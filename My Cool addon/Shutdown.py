@@ -1,11 +1,31 @@
-#blender modules 
+bl_info = {
+    "name": "Render and shutdown pc",
+    "author": "Jacob Samorowski email:jacob35422@gmail.com",
+    "version": (0, 0, 1),
+    "blender": (2, 65, 0),
+    "location": "render > Render and shutdown",
+    "description": "Once render is finished it will save the blend file and shutdown your pc",
+    "warning": "",
+    "doc_url": "",
+    "tracker_url": "",
+    "category": "Render",
+}
 import bpy
-from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty)
-from bpy.types import (PropertyGroup)
 
-#other moduals 
-import os
-import random 
+from bpy.props import (StringProperty,
+                       BoolProperty,
+                       IntProperty,
+                       FloatProperty,
+                       FloatVectorProperty,
+                       EnumProperty,
+                       PointerProperty,
+                       )
+from bpy.types import (Panel,
+                       Menu,
+                       Operator,
+                       PropertyGroup,
+                       )
+
 
 
 class OBJECT_PT_CustomPanel(bpy.types.Panel):
@@ -30,9 +50,17 @@ class OBJECT_PT_CustomPanel(bpy.types.Panel):
 
         if "my_bool"==True:
             print("bpy.ops.mesh.primitive_cube_add")
+       
 
 
-classes = (OBJECT_PT_CustomPanel)
+
+
+
+
+
+
+classes = (OBJECT_PT_CustomPanel,
+)
 
 
 def register():
@@ -40,13 +68,14 @@ def register():
     for cls in classes:
         register_class(cls)
 
-    bpy.types.Scene.my_tool = PointerProperty(type=MyProperties)
+
+
 
 def unregister():
     from bpy.utils import unregister_class
     for cls in reversed(classes):
         unregister_class(cls)
-    del bpy.types.Scene.my_tool
+   
 
 
 if __name__ == "__main__":

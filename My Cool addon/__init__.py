@@ -25,9 +25,9 @@ import random
 
 
 #import from other files 
-from . import Operators  
-from . import Shutdown
+from . import Shutdown 
 from . import Menus
+
 
 
 
@@ -57,8 +57,6 @@ def register():
 
     from bpy.utils import register_class
 
-
-    Operators.register()
     Shutdown.register()
     Menus.register()
 
@@ -76,9 +74,9 @@ def unregister():
     
     from bpy.utils import unregister_class
 
-    Operators.unregister()
+    
     Shutdown.unregister()
-    Menus.register()
+    Menus.unregister()
 
 
     wm = bpy.context.window_manager

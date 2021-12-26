@@ -1,13 +1,75 @@
-#blender modules 
+bl_info = {
+    "name": "My Test Addon",
+    "author": "Jacob",
+    "version": (1, 0),
+    "blender": (2, 65, 0),
+    "location": "3D Veiw > N Panel > My 1st addon, pie menu hot key: mouse button 4",
+    "description": "Adds monkeys in rows",
+    "warning": "",
+    "doc_url": "",
+    "tracker_url": "",
+    "category": "Mesh",
+}
+from typing import Text
+import random
 import bpy
-from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty)
-from bpy.types import (PropertyGroup)
-
-#other moduals 
-import os
-import random 
 
 
+
+#--------------------------------------------------------
+                #Operators 
+#--------------------------------------------------------
+   
+class MESH_OT_MONKEY_grid(bpy.types.Operator):
+    """The Tool Tip"""
+    bl_idname = 'mesh.monkey_grid'
+    bl_label = 'Monkey Grid'
+    bl_options = {"REGISTER", "UNDO"}
+    
+    count_x: bpy.props.IntProperty(
+        name="X", 
+        description="Number of monkeys in the x-direction",
+        default=3,
+        min=0, soft_max=10,
+    )
+    count_y: bpy.props.IntProperty(
+        name="Y", 
+        description="Number of monkeys in the Y-direction",
+        default=3,
+        min=0, soft_max=10,
+    )
+    size: bpy.props.FloatProperty(
+        name="Size",
+        description="Size of each monkey",
+        default=0.5,
+        min=0, soft_max=1,
+    )
+    
+
+    def execute(self, context):
+        for idx in range(self.count_x * self.count_y ):
+            x= idx % self.count_x
+            y= idx //self.count_x
+            bpy.ops.mesh.primitive_monkey_add( 
+            size=self.size,
+            location=(x,y, 1))
+    
+            
+        
+        return {'FINISHED'}
+    
+
+
+
+
+        
+
+    
+
+#--------------------------------------------------------
+                #Panels
+#--------------------------------------------------------
+   
 class TestPanel(bpy.types.Panel):
 
 
@@ -33,6 +95,15 @@ class TestPanel(bpy.types.Panel):
         layout.separator()
         row.operator("mesh.subdivide", icon="MESH_GRID")
 
+
+
+
+
+       
+#--------------------------------------------------------
+                #Menus
+#--------------------------------------------------------
+   
 class WM_OT_pie_menu(bpy.types.Menu):
     # label is displayed at the center of the pie menu.
     bl_label = "Select Mode"
@@ -56,16 +127,36 @@ class WM_OT_pie_menu(bpy.types.Menu):
              pie.operator("mesh.subdivide", icon="MESH_GRID")
              pie.operator("mesh.primitive_cube_add", icon="CUBE")
 
+            
 
 
 
 
+
+
+        
+
+       
+        # operator_enum will just spread all available options
+        # for the type enum of the operator on the pie
+        #pie.operator_enum("mesh.select_mode", "type")
+
+
+
+
+
+#--------------------------------------------------------
+                #Register and Unregister plus keymaps
+#--------------------------------------------------------
 
 
 addon_keymaps = []
-classes = [WM_OT_pie_menu, TestPanel]  
-  
+classes = [MESH_OT_MONKEY_grid,
+TestPanel,
+WM_OT_pie_menu,
 
+]  
+  
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
@@ -94,3 +185,26 @@ def unregister():
     
 if __name__ == '__main__':
     register()
+
+    
+
+    
+
+"""class VIEW3D_PT_monkey_grid(bpy.types.Panel):
+    bl_space_type = 'VIEW3D'
+    bl_region_type = 'UI'
+    bl_category = "Monkeys"
+    bl_label = "Grid"
+
+    def draw(self, context):
+        self.layout.operator('mesh.monkey_grid', text= "default grid", icon="MONKEY")"""
+      
+      
+      
+      
+      
+      
+        
+
+
+    
