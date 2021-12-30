@@ -83,9 +83,9 @@ def unregister():
     kc = wm.keyconfigs.addon
     if kc:
         km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
-            kmi = km.keymap_items.new("wm.call_menu_pie", type='BUTTON4MOUSE', value='PRESS')
-            kmi.properties.name = "WM_OT_pie_menu"
-            addon_keymaps.append((km,kmi))
+        kmi = km.keymap_items.new("wm.call_menu_pie", type='BUTTON4MOUSE', value='PRESS')
+        kmi.properties.name = "WM_OT_pie_menu"
+        addon_keymaps.append((km,kmi))
             
         
     
@@ -103,7 +103,8 @@ def unregister():
     del bpy.types.Scene.my_tool
 
 
-if __name__ == "__main__":
+if __name__ == "____":
     register()
 
+    
 
