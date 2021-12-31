@@ -2,8 +2,8 @@ bl_info = {
     "name": "A mix on things",
     "author": "Jacob",
     "version": (0,0,1),
-    "blender": (2, 65, 0),
-    "location": "3D Veiw > N Panel > My 1st addon or render and shutdown, Pie menu hot key: mouse button 4",
+    "blender": (2, 9, 0),
+    "location": "3D Veiw > N Panel > Mix, Pie menu hot key: mouse button 4",
     "description": "A mix of items",
     "warning": "when using the render and shutdown make sure that you have save everything on your computer before running i take no responeiblity for any lose of files ",
     "doc_url": "",
@@ -25,17 +25,24 @@ import random
 
 
 #import from other files 
-from . import Shutdown 
+from . import Extra_render
 from . import Menus
-
+from . import operators
+from . import Panels
 
 
 
 
 class MyProperties(PropertyGroup):
 
-    my_bool: BoolProperty(
-        name="Enable or Disable",
+    close_blender: BoolProperty(
+        name="close blender",
+        description="A bool property",
+        default = False
+        )
+        
+    shutdown_computer: BoolProperty(
+        name="Shut down computer",
         description="A bool property",
         default = False
         )
@@ -57,8 +64,10 @@ def register():
 
     from bpy.utils import register_class
 
-    Shutdown.register()
+    Extra_render.register()
     Menus.register()
+    Panels.register()
+    operators.register()
 
 
 
@@ -75,35 +84,19 @@ def unregister():
     from bpy.utils import unregister_class
 
     
-    Shutdown.unregister()
+    Extra_render.unregister()
     Menus.unregister()
-
-
-    wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
-    if kc:
-        km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
-        kmi = km.keymap_items.new("wm.call_menu_pie", type='BUTTON4MOUSE', value='PRESS')
-        kmi.properties.name = "WM_OT_pie_menu"
-        addon_keymaps.append((km,kmi))
-            
-        
-    
+    Panels.unregister()
+    operators.unregister()
 
 
     for cls in reversed(classes):
         unregister_class(cls)
 
-    for km,kmi in addon_keymaps:
-        km.keymap_items.remove(kmi)
-    addon_keymaps.clear()
-
-
-
     del bpy.types.Scene.my_tool
 
 
-if __name__ == "____":
+if __name__ == "__main__":
     register()
 
     

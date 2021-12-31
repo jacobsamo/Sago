@@ -12,6 +12,7 @@ bl_info = {
 }
 
 import os
+import time
 import bpy
 
 from bpy.props import (StringProperty,
@@ -75,6 +76,7 @@ def some_other_function(dummy):
 def some_function(dummy):
     print("Render complete")
     bpy.ops.wm.save_mainfile()
+    time.sleep(2)
     os.system("shutdown /s /t 1")
 
     
@@ -89,6 +91,7 @@ class MyProperties(PropertyGroup):
         description="A bool property",
         default = False
         )
+        
     shutdown_computer: BoolProperty(
         name="Shut down computer",
         description="A bool property",
