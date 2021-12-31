@@ -14,14 +14,14 @@ bl_info = {
 }
 
 
-#blender modules 
+#import blender python modules 
 import bpy
-from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty)
-from bpy.types import (PropertyGroup)
-
-#other moduals 
+from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
+from bpy.types import (Panel, Menu, Operator, PropertyGroup,)
+#import other python modules 
 import os
-import random 
+import time
+import random
 
 
 
@@ -55,7 +55,7 @@ class TestPanel(Panel):
         layout.separator()
         row.operator("mesh.subdivide", icon="MESH_GRID")
 
-class ExtraRender(Panel):
+class ExtraRender(TestPanel, Panel):
     bl_idname = "TestPanel"
     bl_label = "Extra render settings"
   
@@ -80,6 +80,8 @@ class ExtraRender(Panel):
         
         if (mytool.shutdown_computer == True):
             bpy.app.handlers.render_complete.append(some_function)  
+
+
 
 def some_other_function(dummy):
     print("Render complete")
@@ -115,6 +117,7 @@ class MESH_OT_MONKEY_grid(Operator):
         default=3,
         min=0, soft_max=10,
     )
+    
     size: bpy.props.FloatProperty(
         name="Size",
         description="Size of each monkey",
@@ -167,7 +170,7 @@ class WM_OT_pie_menu(Menu):
 
 ############register and unregister#############
 
-ddon_keymaps = []
+addon_keymaps = []
 classes = [MESH_OT_MONKEY_grid,
 TestPanel,
 WM_OT_pie_menu,
@@ -176,6 +179,7 @@ ExtraRender
 ]  
   
 def register():
+    from bpy.utils import register_class
     for cls in classes:
         bpy.utils.register_class(cls)
 
@@ -189,10 +193,12 @@ def register():
         kmi.properties.name = "WM_OT_pie_menu"
         addon_keymaps.append((km,kmi))
     
+    bpy.types.Scene.my_tool = PointerProperty(type=MyProperties)
 
 
     
 def unregister():
+    from bpy.utils import unregister_class
     for cls in classes:
         bpy.utils.unregister_class(cls)
 
@@ -200,6 +206,7 @@ def unregister():
         km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
+    del bpy.types.Scene.my_tool
     
 if __name__ == '__main__':
     register()

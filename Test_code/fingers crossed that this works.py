@@ -31,13 +31,35 @@ from bpy.types import (Panel,
 
 
 
-class OBJECT_PT_CustomPanel(Panel):
+class TestPanel(Panel):
+
+
+
+    bl_label = "test Panel"
+    bl_idname = "PT_TestPanel"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Mix'
+
+    def draw(self, context):
+        layout = self.layout
+
+        row = layout.row()
+        row.label(text="Add object", icon= "CUBE")
+        row = layout.row()
+        row.operator("mesh.primitive_cube_add", icon="CUBE")
+        row = layout.row()
+        row.operator("mesh.primitive_uv_sphere_add", icon="MESH_UVSPHERE")
+        row = layout.row()
+        row.operator("mesh.monkey_grid", icon="MONKEY")
+
+        layout.separator()
+        row.operator("mesh.subdivide", icon="MESH_GRID")
+
+class ExtraRender(TestPanel, Panel):
+    bl_idname = "TestPanel"
     bl_label = "Extra render settings"
-    bl_idname = "OBJECT_PT_custom_panel"
-    bl_space_type = "VIEW_3D"   
-    bl_region_type = "UI"
-    bl_category = "Tools"
-    bl_context = "objectmode"   
+  
 
 
     @classmethod
@@ -59,6 +81,21 @@ class OBJECT_PT_CustomPanel(Panel):
         
         if (mytool.shutdown_computer == True):
             bpy.app.handlers.render_complete.append(some_function)  
+
+
+
+def some_other_function(dummy):
+    print("Render complete")
+    bpy.ops.wm.save_mainfile()
+    bpy.ops.wm.quit_blender()
+
+
+def some_function(dummy):
+    print("Render complete")
+    bpy.ops.wm.save_mainfile()
+    time.sleep(2)
+    os.system("shutdown /s /t 1")
+
 
 
  
@@ -102,7 +139,8 @@ class MyProperties(PropertyGroup):
 
 classes = (
 MyProperties,
-OBJECT_PT_CustomPanel,
+TestPanel,
+ExtraRender,
 )
 
 
