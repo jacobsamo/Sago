@@ -11,7 +11,7 @@ bl_info = {
     "category": "Development"
 }
 
-
+import os
 import bpy
 
 from bpy.props import (StringProperty,
@@ -48,18 +48,48 @@ class OBJECT_PT_CustomPanel(Panel):
         scene = context.scene
         mytool = scene.my_tool
 
-        layout.prop(mytool, "my_bool")
+        row = layout.row()
+        row.prop(mytool, "close_blender")
+        row = layout.row()
+        row.prop(mytool, "shutdown_computer")
 
-        if "my_bool"==True:
-            print("bpy.ops.mesh.primitive_cube_add")
-       
+        if (mytool.close_blender == True):
+            bpy.app.handlers.render_complete.append(some_other_function)  
+        
+        if (mytool.shutdown_computer == True):
+            bpy.app.handlers.render_complete.append(some_function)  
 
+
+ 
+
+
+
+
+
+def some_other_function(dummy):
+    print("Render complete")
+    bpy.ops.wm.save_mainfile()
+    bpy.ops.wm.quit_blender()
+
+
+def some_function(dummy):
+    print("Render complete")
+    bpy.ops.wm.save_mainfile()
+    os.system("shutdown /s /t 1")
+
+    
+            
 
 
 
 class MyProperties(PropertyGroup):
 
-    my_bool: BoolProperty(
+    close_blender: BoolProperty(
+        name="Enable or Disable",
+        description="A bool property",
+        default = False
+        )
+    shutdown_computer: BoolProperty(
         name="Enable or Disable",
         description="A bool property",
         default = False
