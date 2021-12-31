@@ -31,6 +31,7 @@ bl_info = {
 
 
 #import blender python modules 
+from typing import Text
 import bpy
 from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
 from bpy.types import (Panel, Menu, Operator, PropertyGroup,)
@@ -49,10 +50,10 @@ import random
 
 
 class TestPanel(Panel):
+    bl_idname = "OBJECT_PT_SaMix"
+    bl_label = "A Mix Of Random Things"
     bl_space_type = "VIEW_3D"
-    bl_context = "objectmode"
     bl_region_type = "UI"
-    bl_label = "Mix of things"
     bl_category = "Sago"
 
     def draw(self, context):
@@ -72,11 +73,11 @@ class TestPanel(Panel):
 
 
 class ExtraRender(Panel):
-    bl_idname = "OBJECT_PT_ByGenModify"
+    bl_idname = "OBJECT_PT_Sarender"
     bl_label = "Extra Render Settings"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "TestPanel"
+    bl_category = "Sago"
 
 
     @classmethod
@@ -89,9 +90,14 @@ class ExtraRender(Panel):
         mytool = scene.my_tool
 
         row = layout.row()
-        row.prop(mytool, "close_blender")
+        row.label(text="Things that can happen after a render")
         row = layout.row()
-        row.prop(mytool, "shutdown_computer")
+        row.prop(mytool, "close_blender", text="Close blender")
+        row = layout.row()
+        row.prop(mytool, "shutdown_computer", text="Shutdown computer")
+
+        
+
 
         if (mytool.close_blender == True):
             bpy.app.handlers.render_complete.append(some_other_function)  
@@ -208,7 +214,7 @@ def register():
     kc = wm.keyconfigs.addon
     if kc:
         km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
-        kmi = km.keymap_items.new("wm.call_menu_pie", type='Button4 Mouse', value='PRESS')
+        kmi = km.keymap_items.new("wm.call_menu_pie", type='BUTTON4MOUSE', value='PRESS')
         kmi.properties.name = "WM_OT_pie_menu"
         addon_keymaps.append((km,kmi))
 
