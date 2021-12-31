@@ -109,6 +109,7 @@ class ExtraRender(Panel):
 def some_other_function(dummy):
     print("Render complete")
     bpy.ops.wm.save_mainfile()
+    time.sleep(2)
     bpy.ops.wm.quit_blender()
 
 
