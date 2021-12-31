@@ -1,17 +1,33 @@
+# ##### BEGIN GPL LICENSE BLOCK #####
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software Foundation,
+#  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
+# ##### END GPL LICENSE BLOCK #####
+
 bl_info = {
     "name": "Sago",
-    "author": "Jacob",
-    "version": (0,0,1),
-    "blender": (2, 9, 0),
-    "location": "3D Veiw > N Panel > Sago, Pie menu hot key: mouse button 4",
-    "description": "A mix of items",
-    "warning": "when using the render and shutdown make sure that you have save everything on your computer before running i take no responeiblity for any lose of files ",
-    "doc_url": "",
-    "tracker_url": "",
-    "category": "",
-
-
-}
+    "description": "A mix of things",
+    "author": "Jacob Samorowksi",
+    "version": (0, 1),
+    "blender": (2, 83, 0),
+    "location": "View 3D > Properties Panel",
+    "doc_url": "https://github.com/Eirfire/Blender-addon/wiki",
+    "tracker_url": "https://github.com/Eirfire/Blender-addon/issues",
+    "support": "COMMUNITY",
+    "category": "Object",
+    }
 
 
 #import blender python modules 
@@ -27,18 +43,17 @@ import random
 
 
 
-###########Panels################
+
+
+
 
 
 class TestPanel(Panel):
-
-
-
-    bl_label = "test Panel"
-    bl_idname = "PT_TestPanel"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'Mix'
+    bl_space_type = "VIEW_3D"
+    bl_context = "objectmode"
+    bl_region_type = "UI"
+    bl_label = "Mix of things"
+    bl_category = "Sago"
 
     def draw(self, context):
         layout = self.layout
@@ -55,10 +70,13 @@ class TestPanel(Panel):
         layout.separator()
         row.operator("mesh.subdivide", icon="MESH_GRID")
 
-class ExtraRender(TestPanel, Panel):
-    bl_idname = "TestPanel"
-    bl_label = "Extra render settings"
-  
+
+class ExtraRender(Panel):
+    bl_idname = "OBJECT_PT_ByGenModify"
+    bl_label = "Extra Render Settings"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "TestPanel"
 
 
     @classmethod
@@ -82,7 +100,6 @@ class ExtraRender(TestPanel, Panel):
             bpy.app.handlers.render_complete.append(some_function)  
 
 
-
 def some_other_function(dummy):
     print("Render complete")
     bpy.ops.wm.save_mainfile()
@@ -96,8 +113,6 @@ def some_function(dummy):
     os.system("shutdown /s /t 1")
 
 
-
-##############operators############
 
 class MESH_OT_MONKEY_grid(Operator):
     """The Tool Tip"""
@@ -117,7 +132,6 @@ class MESH_OT_MONKEY_grid(Operator):
         default=3,
         min=0, soft_max=10,
     )
-    
     size: bpy.props.FloatProperty(
         name="Size",
         description="Size of each monkey",
@@ -140,10 +154,6 @@ class MESH_OT_MONKEY_grid(Operator):
 
 
 
-
-
-############pie menus################
-
 class WM_OT_pie_menu(Menu):
     # label is displayed at the center of the pie menu.
     bl_label = "Select Mode"
@@ -159,46 +169,55 @@ class WM_OT_pie_menu(Menu):
 
        
 
-        mode = object.mode
-        if mode == "OBJECT":
-            pie.operator("mesh.primitive_uv_sphere_add")
 
-        if mode == "EDIT":
-             pie.operator("mesh.subdivide", icon="MESH_GRID")
-             pie.operator("mesh.primitive_cube_add", icon="CUBE")
+class SagoProperties(PropertyGroup):
+
+    close_blender: BoolProperty(
+        name="close blender",
+        description="A bool property",
+        default = False
+        )
+        
+    shutdown_computer: BoolProperty(
+        name="Shut down computer",
+        description="A bool property",
+        default = False
+        )
 
 
-############register and unregister#############
+
+
+
 
 addon_keymaps = []
-classes = [MESH_OT_MONKEY_grid,
-TestPanel,
+classes = (TestPanel,
+ExtraRender,
+MESH_OT_MONKEY_grid,
 WM_OT_pie_menu,
-ExtraRender
+SagoProperties,
 
-]  
-  
+)
+
+# Register
 def register():
-    from bpy.utils import register_class
     for cls in classes:
         bpy.utils.register_class(cls)
-
 
 
     wm = bpy.context.window_manager
     kc = wm.keyconfigs.addon
     if kc:
         km = kc.keymaps.new(name='3D View', space_type='VIEW_3D')
-        kmi = km.keymap_items.new("wm.call_menu_pie", type='BUTTON4MOUSE', value='PRESS')
+        kmi = km.keymap_items.new("wm.call_menu_pie", type='Button4 Mouse', value='PRESS')
         kmi.properties.name = "WM_OT_pie_menu"
         addon_keymaps.append((km,kmi))
+
+    bpy.types.Scene.my_tool = PointerProperty(type=SagoProperties)
     
-    bpy.types.Scene.my_tool = PointerProperty(type=MyProperties)
 
 
-    
+# Unregister
 def unregister():
-    from bpy.utils import unregister_class
     for cls in classes:
         bpy.utils.unregister_class(cls)
 
@@ -207,8 +226,6 @@ def unregister():
     addon_keymaps.clear()
 
     del bpy.types.Scene.my_tool
-    
-if __name__ == '__main__':
-    register()
 
-    
+if __name__ == "__main__":
+    register()
