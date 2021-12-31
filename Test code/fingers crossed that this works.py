@@ -31,7 +31,7 @@ from bpy.types import (Panel,
 
 
 class OBJECT_PT_CustomPanel(Panel):
-    bl_label = "My Panel"
+    bl_label = "Extra render settings"
     bl_idname = "OBJECT_PT_custom_panel"
     bl_space_type = "VIEW_3D"   
     bl_region_type = "UI"
@@ -85,12 +85,12 @@ def some_function(dummy):
 class MyProperties(PropertyGroup):
 
     close_blender: BoolProperty(
-        name="Enable or Disable",
+        name="close blender",
         description="A bool property",
         default = False
         )
     shutdown_computer: BoolProperty(
-        name="Enable or Disable",
+        name="Shut down computer",
         description="A bool property",
         default = False
         )
