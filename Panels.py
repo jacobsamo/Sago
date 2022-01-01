@@ -11,14 +11,11 @@ import random
 
 
 class TestPanel(Panel):
-
-
-
-    bl_label = "test Panel"
-    bl_idname = "PT_TestPanel"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'Mix'
+    bl_idname = "OBJECT_PT_SaMix"
+    bl_label = "A Mix Of Random Things"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "Sago"
 
     def draw(self, context):
         layout = self.layout
@@ -35,10 +32,13 @@ class TestPanel(Panel):
         layout.separator()
         row.operator("mesh.subdivide", icon="MESH_GRID")
 
+
 class ExtraRender(Panel):
-    bl_idname = "TestPanel"
-    bl_label = "Extra render settings"
-  
+    bl_idname = "OBJECT_PT_Sarender"
+    bl_label = "Extra Render Settings"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "Sago"
 
 
     @classmethod
@@ -51,9 +51,14 @@ class ExtraRender(Panel):
         mytool = scene.my_tool
 
         row = layout.row()
-        row.prop(mytool, "close_blender")
+        row.label(text="Things that can happen after a render")
         row = layout.row()
-        row.prop(mytool, "shutdown_computer")
+        row.prop(mytool, "close_blender", text="Close blender")
+        row = layout.row()
+        row.prop(mytool, "shutdown_computer", text="Shutdown computer")
+
+        
+
 
         if (mytool.close_blender == True):
             bpy.app.handlers.render_complete.append(some_other_function)  
@@ -62,7 +67,20 @@ class ExtraRender(Panel):
             bpy.app.handlers.render_complete.append(some_function)  
 
 
-classes = [ExtraRender, TestPanel]  
+def some_other_function(dummy):
+    print("Render complete")
+    bpy.ops.wm.save_mainfile()
+    time.sleep(2)
+    bpy.ops.wm.quit_blender()
+
+
+def some_function(dummy):
+    print("Render complete")
+    bpy.ops.wm.save_mainfile()
+    time.sleep(2)
+    os.system("shutdown /s /t 1")
+
+classes = [TestPanel, ExtraRender]  
   
 def register():
     for cls in classes:

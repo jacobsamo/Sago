@@ -1,17 +1,34 @@
+# ##### BEGIN GPL LICENSE BLOCK #####
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software Foundation,
+#  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
+# ##### END GPL LICENSE BLOCK #####
+
 bl_info = {
-    "name": "A mix on things",
-    "author": "Jacob",
-    "version": (0,0,1),
-    "blender": (2, 9, 0),
-    "location": "3D Veiw > N Panel > Mix, Pie menu hot key: mouse button 4",
-    "description": "A mix of items",
-    "warning": "when using the render and shutdown make sure that you have save everything on your computer before running i take no responeiblity for any lose of files ",
-    "doc_url": "",
-    "tracker_url": "",
-    "category": "",
-
-
-}
+    "name": "Sago",
+    "description": "You can Render your animations and either close blender or shutdown your computer",
+    "author": "Jacob Samorowksi" "Contact me: Jacob35422@gmail.com",
+    "version": (0, 1),
+    "blender": (2, 83, 0),
+    "location": "View 3D > Properties Panel",
+    "warning" : "make sure you have saved all files before checking the shutdown box as you might lose some files, i take no responsibility responiblity for this",
+    "doc_url": "https://github.com/Eirfire/Blender-addon/wiki",
+    "tracker_url": "https://github.com/Eirfire/Blender-addon/issues",
+    "support": "",
+    "category": "Object",
+    }
 
 
 #blender modules 
@@ -25,7 +42,6 @@ import random
 
 
 #import from other files 
-from . import Extra_render
 from . import Menus
 from . import operators
 from . import Panels
@@ -64,7 +80,6 @@ def register():
 
     from bpy.utils import register_class
 
-    Extra_render.register()
     Menus.register()
     Panels.register()
     operators.register()
@@ -84,7 +99,6 @@ def unregister():
     from bpy.utils import unregister_class
 
     
-    Extra_render.unregister()
     Menus.unregister()
     Panels.unregister()
     operators.unregister()
