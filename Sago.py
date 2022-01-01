@@ -18,11 +18,12 @@
 
 bl_info = {
     "name": "Sago",
-    "description": "A mix of things",
+    "description": "Extra render settings STILL IN EARLY STAGES OF DEVOLMENT",
     "author": "Jacob Samorowksi",
     "version": (0, 1),
     "blender": (2, 83, 0),
-    "location": "View 3D > Properties Panel",
+    "location": "View 3D > Properties Panel >Sago",
+    "warning": "make sure that all your files are saved before clicking shutdown computer otherwise you will lose files i take no responsibility for the lose of files and make sure that the blend file is saved before rendering as it will not work",
     "doc_url": "https://github.com/Eirfire/Blender-addon/wiki",
     "tracker_url": "https://github.com/Eirfire/Blender-addon/issues",
     "support": "COMMUNITY",
@@ -46,7 +47,9 @@ import random
 
 
 
-
+#------------------------------------------------------------------------------------------     
+                            #Panels
+#------------------------------------------------------------------------------------------  
 
 
 class TestPanel(Panel):
@@ -121,6 +124,14 @@ def some_function(dummy):
 
 
 
+
+
+#------------------------------------------------------------------------------------------     
+                            #Operators
+#------------------------------------------------------------------------------------------  
+
+
+
 class MESH_OT_MONKEY_grid(Operator):
     """The Tool Tip"""
     bl_idname = 'mesh.monkey_grid'
@@ -161,6 +172,11 @@ class MESH_OT_MONKEY_grid(Operator):
 
 
 
+
+#------------------------------------------------------------------------------------------     
+                            #Menus
+#------------------------------------------------------------------------------------------   
+
 class WM_OT_pie_menu(Menu):
     # label is displayed at the center of the pie menu.
     bl_label = "Select Mode"
@@ -174,7 +190,11 @@ class WM_OT_pie_menu(Menu):
         pie.operator("mesh.subdivide", icon="MESH_GRID")
         pie.operator("bpy.context.object.data.use_auto_smooth = True", icon="MONKEY")
 
-       
+
+
+#------------------------------------------------------------------------------------------     
+                            #Custom Properties 
+#------------------------------------------------------------------------------------------     
 
 
 class SagoProperties(PropertyGroup):
@@ -193,7 +213,9 @@ class SagoProperties(PropertyGroup):
 
 
 
-
+#------------------------------------------------------------------------------------------     
+                            #Registeration
+#------------------------------------------------------------------------------------------  
 
 
 addon_keymaps = []
