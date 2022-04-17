@@ -20,7 +20,7 @@ bl_info = {
     "name": "Sago",
     "description": "Extra render settings STILL IN EARLY STAGES OF DEVOLMENT",
     "author": "Jacob Samorowksi",
-    "version": (0, 1),
+    "version": (0, 0, 2),
     "blender": (2, 83, 0),
     "location": "View 3D > Properties Panel >Sago",
     "warning": "make sure that all your files are saved before clicking shutdown computer otherwise you will lose files i take no responsibility for the lose of files and make sure that the blend file is saved before rendering as it will not work",
