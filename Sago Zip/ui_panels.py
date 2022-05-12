@@ -95,7 +95,6 @@ class VEIW3D_PT_ExtraRender(Panel):
       
 def some_other_function(self, dummy):
     sago = bpy.context.scene.sago
-    self.report({'INFO'}, "Render complete")
     print("Render complete")
     sago.close_blender = False
     bpy.ops.wm.save_mainfile()
@@ -104,7 +103,6 @@ def some_other_function(self, dummy):
 
 def some_function(self, dummy):
     sago = bpy.context.scene.sago
-    self.report({'INFO'}, "Render complete")
     print("Render complete")
     sago.shutdown_computer = False
     bpy.ops.wm.save_mainfile()
