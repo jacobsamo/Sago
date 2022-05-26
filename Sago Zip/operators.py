@@ -1,22 +1,17 @@
 #import blender python modules 
-from unicodedata import name
 import bpy
+from . import bl_info
 import bmesh
 from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
 from bpy.types import (Panel, Menu, Operator, PropertyGroup, AddonPreferences)
-import rna_keymap_ui
 #import other python modules 
 import os
 import time
 import math
-from math import *
+from math import*
 
-class File_browse(Operator):
-    bl_idname = 'sago.files_browse'
-    bl_label = 'File Browse'
-    
-    def execute(self, context):
-        bpy.ops.buttons.file_browse()
+
+
 
 class MESH_OT_MONKEY_grid(bpy.types.Operator):
     """The Tool Tip"""
@@ -207,35 +202,7 @@ class camera_settings(Operator):
         
         return {'FINISHED'}
 
-class NODE_OT_customgroup(Operator):
-    """Tooltip"""
-    bl_idname = "node.simple_operator"
-    bl_label = "sago.geoScatter"
-    bl_options = {'REGISTER', 'UNDO'}
 
-    @classmethod
-    def poll(cls, context):
-        space = context.space_data
-        return space.type == 'NODE_EDITOR'
-
-
-    def execute(self, context):
-
-        
-        mod = bpy.context.active_object
-
-        for mod in mod.modifiers:
-            if mod.type == 'NODES':
-                Scatter(1)
-            
-            else:
-                self.report({'INFO'}, "Object needs geometry nodes")
-
-        
-
-        
-            
-        return {"FINISHED"}
 
 class SAGO_OT_add_displace(Operator):
     bl_idname = "sago.add_displacement"
@@ -440,3 +407,47 @@ class SAGO_OT_add_displace(Operator):
         return wm.invoke_props_dialog(self)
     
 
+#modifiers for pie menu
+class sago_mod_subsurf(Operator):
+    bl_idname = "sago.modifier_subsurf"
+    bl_label = "Adds a subsurf modifier"
+    
+    def execute(self, context):
+        bpy.context.active_object.modifiers.new("Sago Subdiv", 'SUBSURF')
+        return {'FINISHED'}
+
+class sago_mod_displace(Operator):
+    bl_idname = "sago.modifier_displace"
+    bl_label = "Adds a Displacement modifier"
+    
+    def execute(self, context):
+        bpy.context.active_object.modifiers.new("Sago Dsiplace", 'DISPLACE')
+        return {'FINISHED'}
+
+class sago_mod_array(Operator):
+    bl_idname = "sago.modifier_array"
+    bl_label = "Adds an Array modifier"
+    
+    def execute(self, context):
+        bpy.context.active_object.modifiers.new("Sago array", 'ARRAY')
+        return {'FINISHED'}
+
+class sago_mod_wireframe(Operator):
+    bl_idname = "sago.modifier_wireframe"
+    bl_label = "Adds a wireframe modifier"
+    
+    def execute(self, context):
+        bpy.context.active_object.modifiers.new("Sago Wireframe", 'WIREFRAME')
+        return {'FINISHED'}
+
+
+class toggle_face_orientation(bpy.types.Operator):
+    bl_idname = "sago.toggle_face_orientation"
+    bl_label = "Face Orientation"
+    bl_description = "Toggle face orientation"
+
+
+    def execute(self, context):
+        bpy.context.space_data.overlay.show_face_orientation = not bpy.context.space_data.overlay.show_face_orientation
+
+        return {'FINISHED'}

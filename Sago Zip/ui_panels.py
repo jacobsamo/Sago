@@ -1,6 +1,6 @@
 #import blender python modules 
-from unicodedata import name
 import bpy
+from . import bl_info
 import bmesh
 from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
 from bpy.types import (Panel, Menu, Operator, PropertyGroup, AddonPreferences)
@@ -31,6 +31,7 @@ class VEIW3D_PT_Main_Panel(Panel):
         row.operator("mesh.primitive_uv_sphere_add", icon="MESH_UVSPHERE")
         row = layout.row()
         row.operator("mesh.monkey_grid", icon="MONKEY")
+        layout.operator('sago.add_displacement')
 
         layout.separator()
         row.operator("mesh.subdivide", icon="MESH_GRID")
@@ -54,6 +55,7 @@ class VEIW3D_PT_ExtraRender(Panel):
         #change camera resolution
         col.prop(rd, "resolution_x", text="Resolution X")
         col.prop(rd, "resolution_y", text="Resolution Y")
+        col.operator("sago.camera_settings", text='camera settings')
         #add a render button
         props1 = col.operator("render.render", text="Render Image",icon='RENDER_STILL')
         props1.use_viewport = True
@@ -93,6 +95,7 @@ class VEIW3D_PT_ExtraRender(Panel):
 
 
       
+
 def some_other_function(self, dummy):
     sago = bpy.context.scene.sago
     print("Render complete")
@@ -115,19 +118,6 @@ def sago_image_save(self, context):
     img.save_render(filepath)
     bpy.context.scene.save_image = False
 
-
-
-class VEIW3D_PT_quick_effects(Panel):
-    bl_idname = "OBJECT_PT_quick_effects"
-    bl_label = "Quick Effects"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Sago"
-
-    def draw(self, context):
-        print("")
-
-
 #node editor panels
 class NODE_PT_customPanel(Panel):
     bl_label = "Custom Geo Group"
@@ -141,4 +131,3 @@ class NODE_PT_customPanel(Panel):
 
         col = layout.column(align=True)
         col.label(text='There might be something here in the future')
-        col.operator("sago.geoScatter", text="Geo Scatter")

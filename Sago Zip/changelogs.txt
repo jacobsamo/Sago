@@ -1,0 +1,35 @@
+welcome to the change logs for Sago 
+
+creidt to the poeple below for the use of their addons for refence for my own code:
+Addon: Bagapie > by: Antoine Bagattini 
+Addon: ND-v1.27.0 > by: HugeMenace
+
+
+
+
+
+
+V 0.0.4
+Overall changes:
+- Bug fixes
+- General improvements
+- made things look nicer with newer Formats
+
+Operators:
+    new operators:
+    > face orientation- shows normals of a faces
+    > add modifiers - modifers: displace, subsurf, array, wireframe
+
+
+Panels:
+- made things look nicer 
+- added it so you can save images 
+
+
+Menus:
+- made the pie menu look nicer and added more things to it like modifiers and new Operators
+
+
+Addon preferences:
+- made it look nicer and easier to use 
+- added support to change hotkey for the pie menu
