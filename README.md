@@ -1,5 +1,5 @@
-IMPORT!!!! (render and shutdown is not working at the moment due to a bug) 
-1. This addon only really works for rendering animations at the moment further support for single image renders will be added in the future.
+IMPORT!!!! 
+1. Finally this addon works with rendering images just have to click the check box and put in the location (default location is thte tmp folder) 
 2. Make sure you save all the files on your computer before you render out the animation as lose of files from other software might happen if does occur i take no responsibility for lose of files 
 
 
