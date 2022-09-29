@@ -1,12 +1,28 @@
-IMPORT!!!! 
-1. Finally this addon works with rendering images just have to click the check box and put in the location (default location is thte tmp folder) 
-2. Make sure you save all the files on your computer before you render out the animation as lose of files from other software might happen if does occur i take no responsibility for lose of files 
+Hello my name is Jacob, I created this addon for people that don't want to leave their computer on after their render has finished. this addon can also do their things such as easily changing camera settings, displacement, add modifiers through pie menu and some more things. 
+
+## My Contact info:
+- Email: jacob35422@gmail.com
+- Discord: Eirfire#3394
+- Instagram: [@Eirfire](https://www.instagram.com/eirfire/)
+- Twitter: [@Eirfire1](https://mobile.twitter.com/Eirfire1) 
 
 
-Hello my name is Jacob and I have created this addon for people that don't want to leave their computers on after a render is finished, this addon can do other things like displace objects change camera settings and much more. the whole addon is still in early devolment and still needs to be fixed and worked on. I'm new to coding and the Python API so if you have any better ways to do something please let me know and show me how you would do it and I'll see if I can implement it into the addon.
 
-Contact info:
-Email: jacob35422@gmail.com
-Discord: Eirfire#3394
-Instagram: https://www.instagram.com/eirfire/
-Twitter: https://mobile.twitter.com/Eirfire1
+## Contribution
+
+Have a look at [contribution docs](./contributing.md) to see how you can contribute to making this addon better.
+
+To get started follow the steps below:
+1.  ```bash 
+    git clone https://github.com/Eirfire/Sago-Extra-Tools-addon.git 
+    ```
+2. once cloned go into the Sago folder
+3. everything is there have a look and start playing around
+
+Everything should make sense if you need and help than feel free to reach out 
+
+
+## License
+
+Have a look at the [license file](./Sago/LICENSE) for details
+

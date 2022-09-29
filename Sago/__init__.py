@@ -1,3 +1,21 @@
+#                                
+#               @@@@@@@@@@               
+#           @@@            @@@           
+#        @@@    @@@@@@@@@@    @@@        
+#       @@   @@@@@@@@@@@@@@@@   @@       
+#     @@   @@@@@@@@@@@@@@@@@@@@   @@     
+#     @   @@@@@@@@@@@@@@@@@@@@@@   @     
+#    @@  @@@@@@@@@@@@@@@@@@@@@@@@  @@    
+#    @@                            @@    
+#    @@                            @@    
+#    @@  @@@@@@@@@@@@@@@@@@@@@@@@  @@    
+#     @   @@@@@@@@@@@@@@@@@@@@@@   @     
+#     @@   @@@@@@@@@@@@@@@@@@@@   @@     
+#       @@   @@@@@@@@@@@@@@@@   @@       
+#        @@@    @@@@@@@@@@    @@@        
+#           @@@            @@@           
+#               @@@@@@@@@@               
+#
 # ##### BEGIN GPL LICENSE BLOCK #####
 #
 #  This program is free software; you can redistribute it and/or
@@ -18,9 +36,9 @@
 
 bl_info = {
     "name": "Sago",
-    "description": "Extra render settings and quick acces tool",
+    "description": "Extra render settings and quick access tools",
     "author": "Jacob Samorowksi",
-    "version": (0, 0, 4),
+    "version": (0, 5, 0),
     "blender": (2, 83, 0),
     "location": "3d View > Tool shelf",
     "warning": "Make sure other files on computer are saved",
@@ -29,44 +47,25 @@ bl_info = {
     "support": "COMMUNITY",
     "category": "Generic",
 }
-
-
-#import blender python modules 
 import bpy
-import bmesh
 from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
 from bpy.types import (Panel, Menu, Operator, PropertyGroup, AddonPreferences)
 import rna_keymap_ui
-#import other python modules 
-import os
-import time
-import math
-from math import *
 
-#import classes from files
-from . operators import(
-    MESH_OT_MONKEY_grid,
-    camera_settings,
-    SAGO_OT_add_displace,
-    sago_mod_subsurf,
-    sago_mod_displace,
-    sago_mod_array,
-    sago_mod_wireframe,
-    toggle_face_orientation,
-)
+from math import radians 
+from . modules.camera_functions import *
 
-from . ui_panels import(
-    VEIW3D_PT_Main_Panel,
-    VEIW3D_PT_ExtraRender,
-    NODE_PT_customPanel,
 
-)
 
-from . ui_menus import(
-    SAGO_MT_pie_menu,
-    
-)
+from . import ui_menus
 
+from . import ui_panels
+
+from . import operators
+
+from . import modifiers
+
+from . ui_menus import *
 
 
 #------------------------------------------------------------------------------------------     
@@ -74,19 +73,57 @@ from . ui_menus import(
 #------------------------------------------------------------------------------------------  
 class SagoProperties(PropertyGroup):
 
+    
+
+
 
 #extra Render settings
+    after_render_options: EnumProperty(
+        name= "render options",
+        description= "Select things",
+        items= [ 
+            ('close_blender', "Close blender", "Saves scene and closes blender"),
+            ('sleep_computer', "Sleep computer", "Saves scene and puts computer to sleep"),
+            ('shutdown_computer', "Shutdown computer", "Saves scene and shuts down computer"),
+        ]
+    )
+    after_render_options_bool: BoolProperty(
+        name="Render options",
+        description="turn on to use render options",
+        default = False
+    )
+    renderOperators: BoolProperty(
+        name="Render options",
+        description="a tick to do something after render",
+        default = False
+    )
+
+    save_image: BoolProperty(
+        name="Save image",
+        description="after render save an image",
+        default = False
+    )
     close_blender: BoolProperty(
         name="close blender",
         description="A bool property",
         default = False
-        )
+    )
         
     shutdown_computer: BoolProperty(
         name="Shut down computer",
         description="A bool property",
         default = False
-        )
+    )
+    sleep_computer: BoolProperty(
+        name="Shut down computer",
+        description="A bool property",
+        default = False
+    )
+    render_options: BoolProperty(
+        name="render optionx",
+        description="A bool property",
+        default = False
+    )
 
 #Monkey grid properties
     count_x: bpy.props.IntProperty(
@@ -107,9 +144,107 @@ class SagoProperties(PropertyGroup):
         default=0.5,
         min=0, soft_max=1,
     )
-    
+    # camera settings
 
-#prefence that go in the addon aera in prefences for the addon
+    camera_length: FloatProperty(
+            name="camera_length",
+            description="change camera length(mm)",
+            default=50,
+            min=1, soft_max=5000,
+            update= camera_length_update
+        )
+
+    clipping_distance_end: FloatProperty(
+        name="clipping_distance",
+        description="change clipping distance",
+        default= 100,
+        min=1, soft_max = 10000,
+        update= clipping_distance_end_update
+    )
+    clipping_distance_start: FloatProperty(
+        name="clipping_distance",
+        description="change clipping distance",
+        default= 0.01,
+        min= 0.001, soft_max = 10000,
+        update= clipping_distance_start_update
+    )
+    
+    texture_type: EnumProperty(
+        name= "", 
+        description= "Select things",
+        items= [
+            ('1', "Clouds", "Clouds Texture"),
+            ('2', "Vorinoi", "Clouds Texture")
+        ]
+    )
+    smooth: BoolProperty(name="Smooth", description= "Use auto smooth", default=False )
+    shade_smooth: BoolProperty(name="Shade Smooth", description= "Shade smooth", default=False )
+    deg : FloatProperty(
+		name        = "Angle",
+		description = "Auto smooth angle",
+		default     = radians(30),
+		min         = 0,
+		max         = radians(180),
+		step        = 10,
+		precision   = 3,
+		subtype     = "ANGLE"
+		)
+    sub_type: EnumProperty(
+        name= "",
+        description= "Selct things",
+        items= [ 
+            ('op1', "Simple", "Use simple subsurf type"),
+            ('op2', "Catmull-Clark", "Use Catmull-Clark subsurf type"),
+        ]
+    )
+    subdive_amount: IntProperty(
+        name="subdive",
+        description="Subdivide amount",
+        default =1, 
+        min = 0, soft_max = 10
+    )
+    strength: FloatProperty(
+        name = "strength",
+        description="displace strength",
+        default = 1, 
+        soft_min = 0, max = 100
+    )
+    mid_level: FloatProperty(
+        name = "mid level",
+        description="displace mid level",
+        default = 0.5, 
+        min = 0, max = 1
+    )
+    vo_noise_intensity: FloatProperty(
+        name = "Noise Intensity",
+        description="Texture intensity",
+        default = 1, 
+        min = 0.01, max = 10
+    )
+    tex_noise_scale: FloatProperty(
+        name = "Noise scale",
+        description="Texture Scale",
+        default = 0.25, 
+        min = 0, soft_max = 2
+    )
+    colu_noise_depth: IntProperty(
+        name = "Noise Depth",
+        description="Texture depth",
+        default = 2, 
+        min = 0, soft_max = 24
+    )
+    tex_noise_nabla: FloatProperty(
+        name = "Noise nabla",
+        description="Texture nabla",
+        default = 0.03, 
+        min = 0, max = 0.1
+    )
+    use_sub: BoolProperty(name="SubSurf", description= "Use Sub Surf", default=False)
+    sub_amount: IntProperty(name="", description="", default=2, min=0, max=11)
+    
+    submesh: BoolProperty(name="Subdivide", description="Subdive Mesh", default=False)
+
+#preference that go in the addon area in preferences for the addon
 class sago_addon_properties(AddonPreferences):
     bl_idname = __name__
 
@@ -161,17 +296,16 @@ class sago_addon_properties(AddonPreferences):
         row = box.row()
         col = row.column()
 
-        box.label(text='Test box')
         box.label(text='in the addon there are many different operators and menus:\n')
         box.label(text='locations of items:')
         box.label(text='1. Pie menu- Hotkey = Mouse button 4')
         box.label(text='2. side panel - 3D view > toolshelf > sago')
         
-        box.label(text='IMPORTANT!!! This addon is still in early devolment and there will be bugs so sorrybut please let me know if youand i try and fix them ASAP') 
+        box.label(text='IMPORTANT!!! This addon is still in early devolvement and there will be bugs so sorrybut please let me know if youand i try and fix them ASAP') 
 
-        box.label(text='Thank Jacob')
+        box.label(text='Thanks Jacob')
         
-        box.operator("wm.url_open", text="Resport Issues").url = "https://github.com/Eirfire/Sago-Extra-Render-Addon/issues"
+        box.operator("wm.url_open", text="Report Issues").url = "https://github.com/Eirfire/Sago-Extra-Render-Addon/issues"
 
     #what is shown if the tab is set to keymap
     def draw_keymap(self, box):
@@ -200,20 +334,17 @@ class sago_addon_properties(AddonPreferences):
 
 
 
-#add hotkey/ hotkeys to blender   
 addon_keymaps = []
 pie_menu_name = SAGO_MT_pie_menu.bl_idname
 
-#find the hotkey in blenders keymap
 def get_hotkey_entry_item(km, kmi_name, kmi_value):
-
 	for i, km_item in enumerate(km.keymap_items):
 		if km.keymap_items.keys()[i] == kmi_name:
 			if km.keymap_items[i].properties.name == kmi_value:
 				return km_item
 	return None
 
-#adds the hotkey to blenders keymap
+
 def add_hotkey():
 
 	addon_prefs = bpy.context.preferences.addons[__name__].preferences
@@ -226,7 +357,7 @@ def add_hotkey():
 		kmi.active = True
 		addon_keymaps.append((km, kmi))
 
-#removes the hotkey from blenders keymap
+
 def remove_hotkey():
 
 	for km, kmi in addon_keymaps:
@@ -234,7 +365,7 @@ def remove_hotkey():
 
 	addon_keymaps.clear()
 
-#if get_hotkey_entry_item can't find a hotkey this will be called in the pannel
+#if get_hotkey_entry_item can't find a hotkey this will be called in the panel
 class USERPREF_OT_change_hotkey(Operator):
 	'''Add hotkey'''
 	bl_idname = "add_hotkey.sago"
@@ -252,33 +383,21 @@ class USERPREF_OT_change_hotkey(Operator):
 
 #add all classes to be registered
 classes = (
-    #panels
-    VEIW3D_PT_Main_Panel,
-    VEIW3D_PT_ExtraRender,
-    NODE_PT_customPanel,
-    #menus
-    SAGO_MT_pie_menu,
     #properties
     SagoProperties,
     sago_addon_properties,
     USERPREF_OT_change_hotkey,
-    #operators
-    MESH_OT_MONKEY_grid,
-    camera_settings,
-    SAGO_OT_add_displace,
-    sago_mod_subsurf,
-    sago_mod_displace,
-    sago_mod_array,
-    sago_mod_wireframe,
-    toggle_face_orientation,
+    #menu 
+    SAGO_MT_pie_menu
 )
 
-# Register
+
 def register():
-    #save image parameters
+    from bpy.utils import register_class
+    #global properties
     bpy.types.Scene.save_path = bpy.props.StringProperty(
         name = 'save location',
-        default='C:/tmp',
+        default='/tmp/',
         subtype='DIR_PATH',
     )
     bpy.types.Scene.save_name = bpy.props.StringProperty(
@@ -289,28 +408,41 @@ def register():
         name = 'save_image',
         default=False,
     )
+    bpy.types.Scene.active_camera = bpy.props.EnumProperty(
+            name='Cameras',
+            description='All cameras in current scene.',
+            items= get_camera_list,
+            update= camera_list_update,
+        )
 
-    #register class
     for cls in classes:
-        bpy.utils.register_class(cls)
+        register_class(cls)
 
-    #add hotkey/ hotkeys
+    ui_panels.register()
+    operators.register()
+    modifiers.register()
+
+
     add_hotkey()
-    #register custom properties
+
     bpy.types.Scene.sago = PointerProperty(type=SagoProperties)
     
 
 
-# Unregister
+
 def unregister():
-    #unregister classes
-    for cls in classes:
-        bpy.utils.unregister_class(cls)
-    #unregister keymaps
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)
+
+    ui_panels.unregister()
+    operators.unregister()
+    modifiers.unregister()
+
     remove_hotkey()
-    #unregister properties
     del bpy.types.Scene.sago
 
-#makes the file an executable file and reduces errors in code
+
 if __name__ == "__main__":
     register()
