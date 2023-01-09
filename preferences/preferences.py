@@ -2,7 +2,7 @@ import bpy
 from bpy.props import (StringProperty, BoolProperty, IntProperty,
                        FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
 from bpy.types import (PropertyGroup)
-from ..functions.camera_functions import *
+from ..helpers.camera_functions import *
 from math import radians
 
 

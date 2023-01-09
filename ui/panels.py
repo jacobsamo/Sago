@@ -1,9 +1,7 @@
 import bpy
 # from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
 from bpy.types import (Panel)
-from ..functions.render_settings import render_functions
-
-
+from ..helpers.render_settings import render_functions
 
 
 class VIEW3D_PT_SAGO_renderSettings(Panel):
@@ -51,16 +49,19 @@ class VIEW3D_PT_SAGO_renderSettings(Panel):
             col.prop(scene, 'save_name')
             col.separator(factor=0.2)
             col.prop(scene, 'save_path', text='dir')
-            bpy.app.handlers.render_complete.append(render_functions.sago_save_image)
+            bpy.app.handlers.render_complete.append(
+                render_functions.sago_save_image)
 
         if sago.after_render_options_bool:
             if (sago.after_render_options == "sleep_computer"):
-                bpy.app.handlers.render_complete.append(render_functions.sleep_computer)
+                bpy.app.handlers.render_complete.append(
+                    render_functions.sleep_computer)
             elif (sago.after_render_options == "shutdown_computer"):
                 bpy.app.handlers.render_complete.append(
                     render.shutdown_computer)
             elif (sago.after_render_options == 'close_blender'):
-                bpy.app.handlers.render_complete.append(render_functions.close_blender)
+                bpy.app.handlers.render_complete.append(
+                    render_functions.close_blender)
             else:
                 return ''
 
@@ -106,7 +107,6 @@ class VIEW3D_PT_SAGO_camera_settings(Panel):
         col.prop(sago, 'clipping_distance_end', text="Clip End")
 
 
-
 class DATA_PT_SAGO_dof(Panel):
     bl_label = "Depth of Field"
     bl_idname = "DATA_PT_SAGO_dof"
@@ -116,13 +116,11 @@ class DATA_PT_SAGO_dof(Panel):
     bl_category = "Sago"
     bl_options = {'DEFAULT_CLOSED'}
 
-
     def draw_header(self, context):
         cam = bpy.context.scene.active_camera
         dof = bpy.data.objects[cam].data.dof
         layout = self.layout
         layout.prop(dof, 'use_dof', text="")
-
 
     def draw(self, context):
         layout = self.layout
