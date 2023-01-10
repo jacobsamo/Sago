@@ -11,26 +11,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from .helpers.key_map import *
-from .helpers.render_settings import *
-from .helpers.camera_functions import *
-from .preferences.preferences import SagoProperties
-from .preferences.addon_preferences import USERPREFS_OT_SAGO_add_hotkey, sago_addon_properties
-from .operators.generic_op import generic_op
-from .operators.camera_op import camera_op
-from .ui.panels import panels
-from .ui.menus import menus
-from math import radians
-import rna_keymap_ui
-from bpy.types import (Panel, Menu, Operator, PropertyGroup, AddonPreferences)
-from bpy.props import (StringProperty, BoolProperty, IntProperty,
-                       FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
-import bpy
+
+
 bl_info = {
-    "name": "Sago_v2",
+    "name": "Sago",
     "author": "Jacob",
     "description": "Extra render settings and quick access tools",
-    "version": (0, 5, 0),
+    "version": (0, 5, 2),
     "location": "3d View > Tool shelf",
     "warning": "Make sure other files on computer are saved",
     "doc_url": "https://github.com/Eirfire/Blender-addon/wiki",
@@ -38,18 +25,26 @@ bl_info = {
     "support": "COMMUNITY",
     "category": "Generic"
 }
+import bpy
+from bpy.props import (PointerProperty)
+from math import radians
+from ui import menus
+from ui import panels
+from operators import camera_op
+from operators import generic_op
 
+#preferences 
+from preferences.addon_preferences import USERPREFS_OT_SAGO_add_hotkey, sago_addon_properties
+from preferences.preferences import SagoProperties
 
-# Import Modules
-
-# preferences
-
-# Helpers
+# helper functions
+from helpers.camera_functions import *
+from helpers.render_settings  import *
+from helpers.key_map import *
 
 
 SagoProperties()
 sago_addon_properties()
-
 
 classes = [
     USERPREFS_OT_SAGO_add_hotkey,
@@ -81,6 +76,12 @@ def register():
 
     SAGO_key_map.add_hotkey()
 
+    menus.register()
+    panels.register()
+    camera_op.register()
+    generic_op.register()
+
+
     for cls in classes:
         bpy.utils.register_class(cls)
 
@@ -90,6 +91,11 @@ def register():
 def unregister():
 
     SAGO_key_map.remove_hotkey()
+
+    menus.unregister()
+    panels.unregister()
+    camera_op.unregister()
+    generic_op.unregister()
 
     for cls in classes:
         bpy.utils.unregister_class(cls)
