@@ -2,7 +2,7 @@ import bpy
 from bpy.props import (StringProperty, BoolProperty, IntProperty,
                        FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
 from bpy.types import (Operator)
-from ..helpers.render_settings import render_functions
+from .. helpers.render_settings import render_functions
 
 
 class DATA_SAGO_check_ImageSave(bpy.types.Operator):

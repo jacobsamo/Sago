@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "eamodio.gitlens",
+    "github.copilot",
+    "JacquesLucke.blender-development",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "blenderfreetimeprojects.blender-python-code-templates",
+    "sourcery.sourcery"
+  ]
+}

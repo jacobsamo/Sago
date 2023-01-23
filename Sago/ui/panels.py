@@ -1,7 +1,7 @@
 import bpy
 # from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty,)
 from bpy.types import (Panel)
-from ..helpers.render_settings import render_functions
+from .. helpers.render_settings import render_functions
 
 
 class VIEW3D_PT_SAGO_renderSettings(Panel):
