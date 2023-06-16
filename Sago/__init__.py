@@ -11,10 +11,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 from . ui.menus import SAGO_MT_pie_menu
-from . operators.camera_op import classes as camera_opClasses
-from . operators.generic_op import classes as generic_opClasses
-from . ui.panels import classes as panelClasses
-from . ui.menus import classes as menuClasses
+from . operators import camera_op
+from . operators import generic_op
+from . ui import panels
+from . ui import menus
 from . helpers.camera_functions import *
 from . helpers.render_settings import *
 from . helpers.key_map import *
@@ -37,7 +37,17 @@ bl_info = {
     "tracker_url": "https://github.com/Eirfire/Blender-addon/issues",
     "support": "COMMUNITY",
     "category": "Generic"
-}
+}\
+
+
+
+registerables = (
+camera_op,
+generic_op,
+panels,
+menus,
+)
+
 
 # =============================================
 #              Properties
@@ -370,16 +380,8 @@ def register():
 
     SAGO_key_map.add_hotkey()
 
-    for cls in classes:
-        bpy.utils.register_class(cls)
-    for camera_op in camera_opClasses:
-        bpy.utils.register_class(camera_op)
-    for generic_op in generic_opClasses:
-        bpy.utils.register_class(generic_op)
-    for menus in menuClasses:
-        bpy.utils.register_class(menus)
-    for panels in panelClasses:
-        bpy.utils.register_class(panels)
+    for module in registerables:
+        module.register()
 
     bpy.types.Scene.sago = PointerProperty(type=SagoProperties)
 
@@ -388,17 +390,8 @@ def unregister():
 
     SAGO_key_map.remove_hotkey()
 
-    for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
-    for camera_op in reversed(camera_opClasses):
-        bpy.utils.unregister_class(camera_op)
-    for generic_op in reversed(generic_opClasses):
-        bpy.utils.unregister_class(generic_op)
-    for menus in reversed(menuClasses):
-        bpy.utils.unregister_class(menus)
-    for panels in reversed(panelClasses):
-        bpy.utils.unregister_class(panels)
-    del bpy.types.Scene.sago
+    for module in reversed(registerables):
+        module.register()
 
 
 if __name__ == "__main__":
