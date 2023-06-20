@@ -62,21 +62,29 @@ classes = [
     SAGO_MT_pie_menu
 ]
 
-
 def register():
+    # register keymap for this pie menu
+    wm = bpy.context.window_manager
+    km = wm.keyconfigs.addon.keymaps.new(name='Object Mode', space_type='EMPTY')
+    kmi = km.keymap_items.new('wm.call_menu_pie', 'Q', 'PRESS', shift=True)
+    kmi.properties.name = "SAGO_MT_pie_menu"
 
-    from bpy.utils import register_class
 
     for cls in classes:
-        register_class(cls)
+        bpy.utils.register_class(cls)
 
 
 def unregister():
-    from bpy.utils import unregister_class
-
+    # unregister keymap for this pie menu
+    wm = bpy.context.window_manager
+    km = wm.keyconfigs.addon.keymaps['Object Mode']
+    for kmi in km.keymap_items:
+        if kmi.idname == 'wm.call_menu_pie':
+            if kmi.properties.name == "SAGO_MT_pie_menu":
+                km.keymap_items.remove(kmi)
+                break
+            
     for cls in reversed(classes):
-        unregister_class(cls)
+        bpy.utils.unregister_class(cls)
 
 
-if __name__ == "__main__":
-    register()
